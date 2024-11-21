@@ -1,0 +1,48 @@
+---
+title: "SAK_ResearchSprint"
+output:
+  pdf_document: default
+  html_document: default
+date: "2024-11-21"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r Sonrisa}
+
+files<-list.files("data",recursive = TRUE,full.names = TRUE,pattern="puf")
+
+pulse<-map_df(files,read_csv)
+
+```
+
+
+```{r Kathy}
+pulse_perception<-pulse %>%
+  select(PRICECHNG) %>%
+  filter(PRICECHNG>-88)
+
+wider_perception <- pulse_perception %>%
+  count(PRICECHNG) %>%
+  pivot_wider(names_from = PRICECHNG, values_from = n)
+
+pulse_income <- pulse %>%
+  filter(INCOME>-88) %>%
+  select(INCOME)%>%
+  count(INCOME) %>%
+  pivot_wider(names_from = INCOME, values_from = n)
+
+join <- cbind(wider_perception,pulse_income)
+```
+
+
